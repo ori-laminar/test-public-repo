@@ -1,0 +1,26 @@
+name: "lab: T6 pull_request head-definition probe"
+
+# lab: a local security experiment on the operator's own repository. It only
+# echoes inert markers. It contacts no external host and references no
+# third-party repository, organisation, person or product.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Which workflow definition is running
+        run: |
+          echo "T6-PR-MARKER: LAB-BASE-VERSION"
+
+      - name: Event context
+        run: |
+          echo "T6-PR github.sha=${{ github.sha }}"
+          echo "T6-PR github.ref=${{ github.ref }}"
+          echo "T6-PR head.sha=${{ github.event.pull_request.head.sha }}"
+          echo "T6-PR head.repo.fork=${{ github.event.pull_request.head.repo.fork }}"
+          echo "T6-PR author_association=${{ github.event.pull_request.author_association }}"
+          echo "T6-PR repo_variable=[${{ vars.LAB_T6_MARKER }}]"

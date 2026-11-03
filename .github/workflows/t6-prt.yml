@@ -1,0 +1,46 @@
+name: "lab: T6 pull_request_target base-definition probe"
+
+# lab: a local security experiment on the operator's own repository. It only
+# echoes inert markers. It contacts no external host and references no
+# third-party repository, organisation, person or product.
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Which workflow definition is running
+        run: |
+          echo "T6-PRT-MARKER: LAB-BASE-VERSION"
+
+      - name: Event context
+        run: |
+          echo "T6-PRT github.sha=${{ github.sha }}"
+          echo "T6-PRT github.ref=${{ github.ref }}"
+          echo "T6-PRT head.sha=${{ github.event.pull_request.head.sha }}"
+          echo "T6-PRT base.sha=${{ github.event.pull_request.base.sha }}"
+          echo "T6-PRT head.repo.fork=${{ github.event.pull_request.head.repo.fork }}"
+          echo "T6-PRT author_association=${{ github.event.pull_request.author_association }}"
+          echo "T6-PRT repo_variable=[${{ vars.LAB_T6_MARKER }}]"
+
+      - name: Default checkout
+        uses: actions/checkout@v4
+
+      - name: What the default checkout produced
+        run: |
+          echo "T6-PRT default_checkout_sha=$(git rev-parse HEAD)"
+          echo "T6-PRT default_checkout_file_marker=$(grep -o 'LAB-[A-Z]*-VERSION' .github/workflows/t6-prt.yml | head -1)"
+
+      - name: Checkout of the PR head into a subdirectory
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: head-tree
+
+      - name: What the head checkout produced
+        run: |
+          echo "T6-PRT head_checkout_sha=$(git -C head-tree rev-parse HEAD)"
+          echo "T6-PRT head_checkout_file_marker=$(grep -o 'LAB-[A-Z]*-VERSION' head-tree/.github/workflows/t6-prt.yml | head -1)"
