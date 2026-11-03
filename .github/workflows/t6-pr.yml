@@ -28,3 +28,5 @@ jobs:
       - name: Step that exists only in the PR head version
         run: |
           echo "T6-PR-HEAD-ONLY-STEP-RAN"
+
+# lab: second commit to re-trigger the probes with the repository default workflow permission set to write
