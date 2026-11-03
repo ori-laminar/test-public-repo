@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Which workflow definition is running
         run: |
-          echo "T6-PRT-MARKER: LAB-BASE-VERSION"
+          echo "T6-PRT-MARKER: LAB-HEAD-VERSION"
 
       - name: Event context
         run: |
@@ -44,3 +44,9 @@ jobs:
         run: |
           echo "T6-PRT head_checkout_sha=$(git -C head-tree rev-parse HEAD)"
           echo "T6-PRT head_checkout_file_marker=$(grep -o 'LAB-[A-Z]*-VERSION' head-tree/.github/workflows/t6-prt.yml | head -1)"
+
+      - name: Step that exists only in the PR head version
+        run: |
+          echo "T6-PRT-HEAD-ONLY-STEP-RAN"
+
+# lab: second commit to re-trigger the probes with the repository default workflow permission set to write

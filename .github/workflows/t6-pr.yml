@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Which workflow definition is running
         run: |
-          echo "T6-PR-MARKER: LAB-BASE-VERSION"
+          echo "T6-PR-MARKER: LAB-HEAD-VERSION"
 
       - name: Event context
         run: |
@@ -24,3 +24,9 @@ jobs:
           echo "T6-PR head.repo.fork=${{ github.event.pull_request.head.repo.fork }}"
           echo "T6-PR author_association=${{ github.event.pull_request.author_association }}"
           echo "T6-PR repo_variable=[${{ vars.LAB_T6_MARKER }}]"
+
+      - name: Step that exists only in the PR head version
+        run: |
+          echo "T6-PR-HEAD-ONLY-STEP-RAN"
+
+# lab: second commit to re-trigger the probes with the repository default workflow permission set to write
